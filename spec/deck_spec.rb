@@ -31,8 +31,6 @@ describe Deck do
   describe "#deal" do
     it "returns n cards from the top of the deck" do
       dealt_cards = standard_deck.deal(5)
-      p dealt_cards[0]
-      p top_five[0]
       expect(dealt_cards).to eq(top_five)
     end
 
@@ -44,6 +42,18 @@ describe Deck do
     it "won't allow a deal of more cards than are in the deck" do
       expect { standard_deck.deal(53) }.to \
         raise_error("not enough cards in deck")
+    end
+  end
+
+  describe "#return" do
+    it "return n cards to the top of the deck" do
+      standard_deck.return(top_five)
+      expect(standard_deck.cards.last(5)).to eq(top_five)
+    end
+
+    it "only returns cards" do
+      expect { standard_deck.return(top_five + [Object.new]) }.to \
+        raise_error("decks only contain cards")
     end
   end
 end

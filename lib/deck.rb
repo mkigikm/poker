@@ -20,4 +20,9 @@ class Deck
     raise "not enough cards in deck" if num > cards.count
     cards.shift(num)
   end
+
+  def return(cards)
+    raise "decks only contain cards" unless cards.all? { |c| c.is_a?(Card) }
+    @cards.concat(cards)
+  end
 end
