@@ -50,4 +50,31 @@ describe Card do
       expect(three_hearts.compare(deuce_hearts)).to be 1
     end
   end
+
+  let(:ace_spades) { Card.new(:ace, :spades) }
+  describe "::order" do
+    it "orders cards by rank" do
+      cards = Card.order([deuce_hearts, three_hearts, deuce_clubs])
+      expect(cards[0].rank).to be :three
+      expect(cards[1].rank).to be :deuce
+      expect(cards[2].rank).to be :deuce
+    end
+
+    it "puts aces on top by default" do
+      cards = Card.order([deuce_hearts, three_hearts, ace_spades, deuce_clubs])
+      expect(cards[0].rank).to be :ace
+      expect(cards[1].rank).to be :three
+      expect(cards[2].rank).to be :deuce
+      expect(cards[3].rank).to be :deuce
+    end
+
+    it "puts aces on bottom if aces are low" do
+      cards = Card.order([deuce_hearts, three_hearts, ace_spades, deuce_clubs],
+                            true)
+      expect(cards[0].rank).to be :three
+      expect(cards[1].rank).to be :deuce
+      expect(cards[2].rank).to be :deuce
+      expect(cards[3].rank).to be :ace
+    end
+  end
 end

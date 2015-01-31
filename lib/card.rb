@@ -1,10 +1,10 @@
 class Card
   attr_reader :rank, :suit
   SUITS = {
-      clubs: "♣",
+      clubs:    "♣",
       diamonds: "♦",
-      hearts: "♥",
-      spades: "♠"
+      hearts:   "♥",
+      spades:   "♠"
     }
   RANKS = {
       deuce: "2",
@@ -30,6 +30,10 @@ class Card
     end
   end
 
+  def self.order(cards, ace_low=false)
+    cards.sort { |c0, c1| c1.compare(c0, ace_low) }
+  end
+
   def initialize(rank, suit)
     @rank = rank
     @suit = suit
@@ -41,12 +45,16 @@ class Card
     rank == other_card.rank && suit == other_card.suit
   end
 
-  def compare(other_card)
+  def compare(other_card, ace_low=false)
     unless other_card.is_a?(self.class)
       raise ArgumentError.new("expected a Card")
     end
 
-    RANKS.keys.index(rank) <=> RANKS.keys.index(other_card.rank)
+    rank_value(ace_low) <=> other_card.rank_value(ace_low)
+  end
+
+  def rank_value(ace_low=false)
+    rank == :ace && ace_low ? -1 : RANKS.keys.index(rank)
   end
 
   def inspect

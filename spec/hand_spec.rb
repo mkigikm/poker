@@ -39,4 +39,49 @@ describe Hand do
       expect(hand.cards).to include(*to_replace)
     end
   end
+
+  let(:royal_flush) {
+    Hand.new([
+      Card.new(:ace,   :spades),
+      Card.new(:king,  :spades),
+      Card.new(:queen, :spades),
+      Card.new(:jack,  :spades),
+      Card.new(:ten,   :spades)
+    ].shuffle)
+  }
+
+  let(:ace_low_straight_flush) {
+    Hand.new([
+      Card.new(:ace,   :spades),
+      Card.new(:deuce, :spades),
+      Card.new(:three, :spades),
+      Card.new(:four,  :spades),
+      Card.new(:five,  :spades)
+    ].shuffle)
+  }
+
+  describe "#value" do
+    it "identifies straight flushes" do
+      value, card_order = royal_flush.value
+      correct_card_order = Card.order(royal_flush.cards)
+      expect(value).to be :straight_flush
+      expect(card_order).to eq(correct_card_order)
+    end
+
+    it "identifies ace low straight flushes" do
+      value, card_order = ace_low_straight_flush.value
+      correct_card_order = Card.order(ace_low_straight_flush.cards, true)
+      expect(value).to be :straight_flush
+      expect(card_order).to eq(correct_card_order)
+    end
+
+    it "identifies four of a kind"
+    it "identifies full house"
+    it "identifies flushes"
+    it "identifies straights"
+    it "identifies three of a kind"
+    it "identifies two pair"
+    it "identifies pairs"
+    it "identifies high card"
+  end
 end
