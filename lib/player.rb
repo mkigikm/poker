@@ -1,3 +1,5 @@
+require_relative 'errors'
+
 class Player
   attr_reader :name, :bankroll
   attr_accessor :hand
@@ -27,5 +29,16 @@ class Player
     raise "can't fold with no hand" if folded?
     deck.return(hand.cards)
     @hand = nil
+  end
+
+  def replace_cards(to_remove, draw_deck, discard_deck)
+    begin
+      to_add = draw_deck.deal(to_remove.count)
+      hand.replace(to_remove, to_add)
+      discard_deck.return(to_remove)
+    rescue PokerError => e
+      draw_deck.return(to_add)
+      raise e
+    end
   end
 end

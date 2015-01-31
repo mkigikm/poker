@@ -1,3 +1,5 @@
+require_relative 'errors'
+
 class Hand
   include Comparable
 
@@ -34,15 +36,17 @@ class Hand
 
   def replace(remove, add)
     unless remove.all? { |card| cards.include?(card) }
-      raise "those cards aren't in the hand"
+      raise PokerError.new("those cards aren't in the hand")
     end
 
-    raise "must replace all the removed cards" unless remove.count == add.count
-
+    unless remove.count == add.count
+      raise PokerError.new("must replace all the removed cards")
+    end
+    
     replacing = remove.count
     if replacing == 5 ||
         (remove.count == 4 && (cards - remove).first.rank != :ace)
-      raise "can only replace three cards if not keeping an ace"
+      raise PokerError.new("can only replace three cards if not keeping an ace")
     end
 
     cards.delete_if { |card| remove.include?(card) }

@@ -89,7 +89,23 @@ describe Player do
     end
   end
 
-  # describe "#replace_cards" do
-  #   it
-  # end
+  let(:discard_deck) { double(:discard_deck) }
+
+  describe "#replace_cards" do
+    it "gets new cards from the draw deck" do
+      player.hand = hand
+      to_remove = hand.cards.take(3)
+
+      expect(discard_deck).to receive(:return).with(to_remove)
+
+      player.replace_cards(to_remove, deck, discard_deck)
+    end
+
+    it "returns to drawn cards to draw deck if an error is raised" do
+      player.hand = hand
+      to_remove = [Card.new(:king, :hearts)]
+
+      expect { player.replace_cards }.to raise_error
+    end
+  end
 end
