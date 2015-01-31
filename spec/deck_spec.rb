@@ -51,9 +51,8 @@ describe Deck do
       expect(standard_deck.cards.last(5)).to eq(top_five)
     end
 
-    it "only returns cards" do
-      expect { standard_deck.return(top_five + [Object.new]) }.to \
-        raise_error("decks only contain cards")
+    it "only returns collections" do
+      expect { standard_deck.return(Object.new) }.to raise_error
     end
   end
 end

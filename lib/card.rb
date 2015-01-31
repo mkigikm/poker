@@ -1,12 +1,30 @@
 class Card
   attr_reader :rank, :suit
-  SUITS = [:clubs, :diamonds, :hearts, :spades]
-  RANKS = [:deuce, :three, :four, :five, :six, :seven, :eight, :nine, :ten,
-           :jack, :queen, :king, :ace]
+  SUITS = {
+      clubs: "♣",
+      diamonds: "♦",
+      hearts: "♥",
+      spades: "♠"
+    }
+  RANKS = {
+      deuce: "2",
+      three: "3",
+      four:  "4",
+      five:  "5",
+      six:   "6",
+      seven: "7",
+      eight: "8",
+      nine:  "9",
+      ten:   "10",
+      jack:  "J",
+      queen: "Q",
+      king:  "K",
+      ace:   "A"
+    }
 
   def self.all_cards
-    SUITS.collect_concat do |suit|
-      RANKS.collect do |rank|
+    SUITS.keys.collect_concat do |suit|
+      RANKS.keys.collect do |rank|
         Card.new(rank, suit)
       end
     end
@@ -28,6 +46,10 @@ class Card
       raise ArgumentError.new("expected a Card")
     end
 
-    RANKS.index(rank) <=> RANKS.index(other_card.rank)
+    RANKS.keys.index(rank) <=> RANKS.keys.index(other_card.rank)
+  end
+
+  def inspect
+    "#{RANKS[rank]}#{SUITS[suit]}"
   end
 end
