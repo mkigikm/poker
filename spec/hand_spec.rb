@@ -60,6 +60,106 @@ describe Hand do
     ].shuffle)
   }
 
+  let(:four_of_a_kind) {
+    Hand.new([
+      Card.new(:queen, :hearts),
+      Card.new(:queen, :diamonds),
+      Card.new(:queen, :clubs),
+      Card.new(:queen, :spades),
+      Card.new(:king,  :spades)
+    ].shuffle)
+  }
+
+  let(:king_queen_boat) {
+    Hand.new([
+      Card.new(:queen, :hearts),
+      Card.new(:king,  :diamonds),
+      Card.new(:king,  :clubs),
+      Card.new(:queen, :spades),
+      Card.new(:king,  :spades)
+    ].shuffle)
+  }
+
+  let(:queen_king_boat) {
+    Hand.new([
+      Card.new(:queen, :hearts),
+      Card.new(:queen, :diamonds),
+      Card.new(:king,  :clubs),
+      Card.new(:queen, :spades),
+      Card.new(:king,  :spades)
+    ].shuffle)
+  }
+
+  let(:flush) {
+    Hand.new([
+      Card.new(:ace,   :spades),
+      Card.new(:deuce, :spades),
+      Card.new(:three, :spades),
+      Card.new(:four,  :spades),
+      Card.new(:six,   :spades)
+    ].shuffle)
+  }
+
+  let(:ace_high_straight) {
+    Hand.new([
+      Card.new(:ace,   :spades),
+      Card.new(:king,  :spades),
+      Card.new(:queen, :spades),
+      Card.new(:jack,  :spades),
+      Card.new(:ten,   :hearts)
+    ].shuffle)
+  }
+
+  let(:ace_low_straight) {
+    Hand.new([
+      Card.new(:ace,   :spades),
+      Card.new(:deuce, :spades),
+      Card.new(:three, :spades),
+      Card.new(:four,  :spades),
+      Card.new(:five,  :hearts)
+    ].shuffle)
+  }
+
+  let(:three_of_a_kind) {
+    Hand.new([
+      Card.new(:queen, :hearts),
+      Card.new(:king,  :diamonds),
+      Card.new(:king,  :clubs),
+      Card.new(:four,  :spades),
+      Card.new(:king,  :spades)
+    ].shuffle)
+  }
+
+  let(:two_pair) {
+    Hand.new([
+      Card.new(:queen, :hearts),
+      Card.new(:king,  :diamonds),
+      Card.new(:four,  :clubs),
+      Card.new(:four,  :spades),
+      Card.new(:king,  :spades)
+    ].shuffle)
+  }
+
+  let(:pair) {
+    Hand.new([
+      Card.new(:queen, :hearts),
+      Card.new(:ace,   :diamonds),
+      Card.new(:four,  :clubs),
+      Card.new(:queen, :spades),
+      Card.new(:king,  :spades)
+    ].shuffle)
+  }
+
+  let(:high_card) {
+    Hand.new([
+      Card.new(:queen, :hearts),
+      Card.new(:ace,   :diamonds),
+      Card.new(:four,  :clubs),
+      Card.new(:ten,   :spades),
+      Card.new(:king,  :spades)
+    ].shuffle)
+  }
+
   describe "#value" do
     it "identifies straight flushes" do
       value, card_order = royal_flush.value
@@ -75,13 +175,76 @@ describe Hand do
       expect(card_order).to eq(correct_card_order)
     end
 
-    it "identifies four of a kind"
-    it "identifies full house"
-    it "identifies flushes"
-    it "identifies straights"
-    it "identifies three of a kind"
-    it "identifies two pair"
-    it "identifies pairs"
-    it "identifies high card"
+    it "identifies four of a kind" do
+      value, card_order = four_of_a_kind.value
+      expect(value).to be :four_of_a_kind
+      expect(card_order.last.rank).to be :king
+    end
+
+    it "identifies full house" do
+      value, card_order = king_queen_boat.value
+      expect(value).to be :full_house
+      expect(card_order.first.rank).to be :king
+      expect(card_order[3].rank).to be :queen
+    end
+
+    it "orders full houses correctly" do
+      value, card_order = queen_king_boat.value
+      expect(value).to be :full_house
+      expect(card_order.first.rank).to be :queen
+      expect(card_order[3].rank).to be :king
+    end
+
+    it "identifies flushes" do
+      value, card_order = flush.value
+      expect(value).to be :flush
+    end
+
+    it "identifies straights" do
+      value, card_order = ace_high_straight.value
+      expect(value).to be :straight
+    end
+
+    it "identifies ace low straights" do
+      value, card_order = ace_low_straight.value
+      expect(value).to be :straight
+      expect(card_order.first.rank).to be :five
+      expect(card_order.last.rank).to be :ace
+    end
+
+    it "identifies three of a kind" do
+      value, card_order = three_of_a_kind.value
+      expect(value).to be :three_of_a_kind
+      expect(card_order.first.rank).to be :king
+      expect(card_order[3].rank).to be :queen
+      expect(card_order.last.rank).to be :four
+    end
+
+    it "identifies two pair" do
+      value, card_order = two_pair.value
+      expect(value).to be :two_pair
+      expect(card_order.first.rank).to be :king
+      expect(card_order[2].rank).to be :four
+      expect(card_order.last.rank).to be :queen
+    end
+
+    it "identifies pairs" do
+      value, card_order = pair.value
+      expect(value).to be :pair
+      expect(card_order.first.rank).to be :queen
+      expect(card_order[2].rank).to be :ace
+      expect(card_order[3].rank).to be :king
+      expect(card_order.last.rank).to be :four
+    end
+
+    it "identifies high card" do
+      value, card_order = high_card.value
+      expect(value).to be :high_card
+      expect(card_order.first.rank).to be :ace
+      expect(card_order[1].rank).to be :king
+      expect(card_order[2].rank).to be :queen
+      expect(card_order[3].rank).to be :ten
+      expect(card_order.last.rank).to be :four
+    end
   end
 end
