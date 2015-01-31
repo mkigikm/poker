@@ -275,4 +275,29 @@ describe Hand do
       expect(royal_flush == royal_flush).to be true
     end
   end
+
+  describe "::winning_hands" do
+    it "returns [] when given no hands" do
+      expect(Hand.winning_hands([])).to eq([])
+    end
+
+    it "identifies when one hand is best" do
+      expect(Hand.winning_hands([royal_flush, pair])).to \
+        contain_exactly(royal_flush)
+    end
+
+    it "identifies ties" do
+      other_high_card = Hand.new(
+        [
+          Card.new(:queen, :diamonds),
+          Card.new(:ace,   :spades),
+          Card.new(:four,  :hearts),
+          Card.new(:ten,   :clubs),
+          Card.new(:king,  :clubs)
+        ].shuffle)
+
+      expect(Hand.winning_hands([high_card, other_high_card])).to \
+        contain_exactly(high_card, other_high_card)
+    end
+  end
 end

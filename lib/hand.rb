@@ -15,6 +15,19 @@ class Hand
 
   attr_reader :cards
 
+  def self.winning_hands(hands)
+    winners = hands.take(1)
+
+    hands.drop(1).each do |new_hand|
+      case winners.first <=> new_hand
+      when  0 then winners << new_hand
+      when -1 then winners = [new_hand]
+      end
+    end
+
+    winners
+  end
+
   def initialize(cards)
     @cards = cards
   end
