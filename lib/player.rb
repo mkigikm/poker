@@ -4,6 +4,20 @@ class Player
   attr_reader :name, :bankroll
   attr_accessor :hand
 
+  def self.parse_bet(input)
+    if input[0].upcase == "F"
+      :fold
+    elsif input[0].upcase == "C"
+      :call
+    else
+      Integer(input)
+    end
+  end
+
+  def self.parse_replace(input)
+    input.split(",").map { |i| Integer(i) }
+  end
+
   def initialize(name, bankroll)
     @name = name
     @bankroll = bankroll
@@ -11,6 +25,34 @@ class Player
 
   def can_bet?
     !folded? && bankroll > 0
+  end
+
+  def bet_turn(game)
+    puts hand
+    puts "Place your bet (C to call, F to fold): "
+    action = gets.chomp
+
+    case self.class.parse_bet(action)
+    when :fold then fold(game.discard_deck)
+    when :call then make_bet(game, game.current_bet)
+    else then make_bet(game, action)
+    end
+
+    rescue StandardError => e
+      puts e
+      retry
+
+  end
+
+  def discard_turn(game)
+    puts hand
+    puts "What cards would you like to replace (separate with commas): "
+    to_replace = self.class.parse_replace(gets.chomp)
+    replace_card(to_replace.map { |i| hand.cards[i] }, game.draw_deck,
+      game.discard_deck)
+
+    rescue
+      puts e
   end
 
   def make_bet(game, bet_size)
