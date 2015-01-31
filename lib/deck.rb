@@ -15,4 +15,9 @@ class Deck
     cards.shuffle!
     self
   end
+
+  def deal(num)
+    raise "not enough cards in deck" if num > cards.count
+    cards.shift(num)
+  end
 end

@@ -8,13 +8,13 @@ describe Deck do
     it "creates a deck from an array of cards" do
       clubs = Card.all_cards[0..12]
       deck = Deck.new(clubs)
-      expect(deck.cards).to contain_exactly(*clubs)
+      expect(deck.cards).to include(*clubs)
     end
   end
 
   describe "#standard_deck" do
     it "creates a deck with 52 cards" do
-      expect(standard_deck.cards).to contain_exactly(*Card.all_cards)
+      expect(standard_deck.cards).to include(*Card.all_cards)
     end
   end
 
@@ -26,11 +26,24 @@ describe Deck do
     end
   end
 
+  let(:top_five) { Card.all_cards[0..4] }
+
   describe "#deal" do
-    it "returns n cards from the top of the deck"
+    it "returns n cards from the top of the deck" do
+      dealt_cards = standard_deck.deal(5)
+      p dealt_cards[0]
+      p top_five[0]
+      expect(dealt_cards).to eq(top_five)
+    end
 
-    it "removes the cards from the deck"
+    it "removes the cards from the deck" do
+      standard_deck.deal(5)
+      expect(standard_deck.cards).to_not include(*top_five)
+    end
 
-    it "won't allow a deal of more cards than are in the deck"
+    it "won't allow a deal of more cards than are in the deck" do
+      expect { standard_deck.deal(53) }.to \
+        raise_error("not enough cards in deck")
+    end
   end
 end
