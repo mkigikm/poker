@@ -247,4 +247,32 @@ describe Hand do
       expect(card_order.last.rank).to be :four
     end
   end
+
+  describe "#<=>" do
+    it "ranks hands according to value" do
+      hands = [
+        royal_flush,
+        four_of_a_kind,
+        king_queen_boat,
+        flush,
+        ace_high_straight,
+        three_of_a_kind,
+        two_pair,
+        pair,
+        high_card
+      ]
+
+      hands.each_cons(2) do |h0, h1|
+        expect(h0 > h1).to be true
+      end
+    end
+
+    it "breaks ties with highest card" do
+      expect(royal_flush > ace_low_straight_flush).to be true
+    end
+
+    it "correctly identifies ties" do
+      expect(royal_flush == royal_flush).to be true
+    end
+  end
 end

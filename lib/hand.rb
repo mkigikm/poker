@@ -1,4 +1,18 @@
 class Hand
+  include Comparable
+
+  HAND_RANKINGS = [
+    :high_card,
+    :pair,
+    :two_pair,
+    :three_of_a_kind,
+    :straight,
+    :flush,
+    :full_house,
+    :four_of_a_kind,
+    :straight_flush
+  ]
+
   attr_reader :cards
 
   def initialize(cards)
@@ -48,6 +62,23 @@ class Hand
       [:pair,            sum_groups]
     else
       [:high_card,       ace_high_order]
+    end
+  end
+
+  def <=>(other_hand)
+    my_value, my_card_order       = value
+    other_value, other_card_order = other_hand.value
+
+    if my_value != other_value
+      HAND_RANKINGS.index(my_value) <=> HAND_RANKINGS.index(other_value)
+    else
+      my_card_order.zip(other_card_order).each do |(c0, c1)|
+        case c0.compare(c1)
+        when 1  then return 1
+        when -1 then return -1
+        end
+      end
+      0
     end
   end
 
