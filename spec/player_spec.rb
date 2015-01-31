@@ -88,4 +88,8 @@ describe Player do
         raise_error("can't fold with no hand")
     end
   end
+
+  # describe "#replace_cards" do
+  #   it
+  # end
 end

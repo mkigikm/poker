@@ -39,6 +39,12 @@ class Hand
 
     raise "must replace all the removed cards" unless remove.count == add.count
 
+    replacing = remove.count
+    if replacing == 5 ||
+        (remove.count == 4 && (cards - remove).first.rank != :ace)
+      raise "can only replace three cards if not keeping an ace"
+    end
+
     cards.delete_if { |card| remove.include?(card) }
     cards.concat(add)
     remove

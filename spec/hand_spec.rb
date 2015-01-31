@@ -38,6 +38,52 @@ describe Hand do
       hand.replace(to_remove, to_replace)
       expect(hand.cards).to include(*to_replace)
     end
+
+    it "doesn't allow replacing five cards" do
+      expect { hand.replace(hand.cards, full_deck.deal(5)) }.to \
+        raise_error "can only replace three cards if not keeping an ace"
+    end
+
+    let(:ace_hand) {
+      Hand.new([
+        Card.new(:ace,   :spades),
+        Card.new(:king,  :spades),
+        Card.new(:queen, :spades),
+        Card.new(:jack,  :spades),
+        Card.new(:ten,   :spades)
+      ])
+    }
+
+    let(:no_ace_hand) {
+      Hand.new([
+        Card.new(:nine,  :spades),
+        Card.new(:king,  :spades),
+        Card.new(:queen, :spades),
+        Card.new(:jack,  :spades),
+        Card.new(:ten,   :spades)
+      ])
+    }
+
+    let(:add_cards) {
+      [
+        Card.new(:ace, :diamonds),
+        Card.new(:ace, :clubs),
+        Card.new(:ace, :hearts),
+        Card.new(:king, :hearts)
+      ]
+    }
+
+    it "allows a hand with an ace to replace four cards" do
+      remove_cards = ace_hand.cards[1..-1]
+      expect { ace_hand.replace(remove_cards, add_cards) }.to_not \
+        raise_error
+    end
+
+    it "doesn't allow a hand with an to replace four cards if replacing ace" do
+      remove_cards = ace_hand.cards[0..-2]
+      expect { ace_hand.replace(remove_cards, add_cards) }.to \
+        raise_error("can only replace three cards if not keeping an ace")
+    end
   end
 
   let(:royal_flush) {
