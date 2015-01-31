@@ -1,5 +1,6 @@
 class Card
   attr_reader :rank, :suit
+  
   SUITS = {
       clubs:    "♣",
       diamonds: "♦",
