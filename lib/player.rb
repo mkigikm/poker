@@ -28,14 +28,14 @@ class Player
   end
 
   def bet_turn(game)
-    puts hand
-    puts "Place your bet (C to call, F to fold): "
-    action = gets.chomp
+    p hand.cards
+    puts "Place your bet #{name} (C to call, F to fold): "
+    action = self.class.parse_bet(gets.chomp)
 
-    case self.class.parse_bet(action)
+    case action
     when :fold then fold(game.discard_deck)
     when :call then make_bet(game, game.current_bet)
-    else then make_bet(game, action)
+    else make_bet(game, action)
     end
 
     rescue StandardError => e

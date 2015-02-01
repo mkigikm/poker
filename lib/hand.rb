@@ -42,7 +42,7 @@ class Hand
     unless remove.count == add.count
       raise PokerError.new("must replace all the removed cards")
     end
-    
+
     replacing = remove.count
     if replacing == 5 ||
         (remove.count == 4 && (cards - remove).first.rank != :ace)
